@@ -117,6 +117,7 @@ public class AuthenticationManager : MonoBehaviour
             await docRef.SetAsync(profile);
 
             Debug.Log($"Player profile created in Firestore for UID: {user.UserId}");
+            await LoadPlayerProfile();
             return true;
         }
         catch (Exception ex)
@@ -141,6 +142,7 @@ public class AuthenticationManager : MonoBehaviour
 
             Debug.Log($"Login Success: {user.Email}");
             OnLoginSuccess?.Invoke(user);
+            await LoadPlayerProfile();
             return true;
         }
         catch (Exception ex)
@@ -163,8 +165,30 @@ public class AuthenticationManager : MonoBehaviour
 
     public string GetUID() => CurrentUser?.UserId ?? "";
     public string GetEmail() => CurrentUser?.Email ?? "";
-    public int getSelectedCharacter() => CurrentUser != null ? GetSelectedPlayer().Result : 0;
-    private async Task<int> GetSelectedPlayer()
+    public PlayerProfile CurrentProfile { get; private set; }
+    private async Task LoadPlayerProfile()
+    {
+        if (CurrentUser == null)
+            return;
+
+        DocumentReference doc =
+            Firestore.Collection("players").Document(CurrentUser.UserId);
+
+        DocumentSnapshot snapshot = await doc.GetSnapshotAsync();
+
+        if (snapshot.Exists)
+        {
+            CurrentProfile = snapshot.ConvertTo<PlayerProfile>();
+
+            Debug.Log("Profile Loaded");
+            Debug.Log("Character = " + CurrentProfile.selectedCharacter);
+        }
+    }
+    public int getSelectedCharacter()
+    {
+        return CurrentUser != null ? GetSelectedPlayer().Result : 0;
+    }
+    public async Task<int> GetSelectedPlayer()
     {
         if (!IsInitialized)
         {

@@ -3,17 +3,14 @@ using UnityEngine;
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject malePlayer, femalePlayer;
-    private void Start()
+    public Transform spawnPoint;
+    private async void Start()
     {
-        if(AuthenticationManager.Instance.getSelectedCharacter() == 1)
-        {
-            malePlayer.SetActive(true);
-            femalePlayer.SetActive(false);
-        }
-        else if (AuthenticationManager.Instance.getSelectedCharacter() == 0)
-        {
-            malePlayer.SetActive(false);
-            femalePlayer.SetActive(true);
-        }
+        int selected = await AuthenticationManager.Instance.GetSelectedPlayer();
+
+        if (selected == 1)
+            Instantiate(malePlayer, spawnPoint.position, spawnPoint.rotation);
+        else
+            Instantiate(femalePlayer, spawnPoint.position, spawnPoint.rotation);
     }
 }
