@@ -163,4 +163,44 @@ public class AuthenticationManager : MonoBehaviour
 
     public string GetUID() => CurrentUser?.UserId ?? "";
     public string GetEmail() => CurrentUser?.Email ?? "";
+    public int getSelectedCharacter() => CurrentUser != null ? GetSelectedPlayer().Result : 0;
+    private async Task<int> GetSelectedPlayer()
+    {
+        if (!IsInitialized)
+        {
+            Debug.LogError("Firebase not initialized.");
+            return 0;
+        }
+
+        if (CurrentUser == null)
+        {
+            Debug.LogError("No user is logged in.");
+            return 0;
+        }
+
+        try
+        {
+            DocumentReference docRef =
+                Firestore.Collection("players").Document(CurrentUser.UserId);
+
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+            if (!snapshot.Exists)
+            {
+                Debug.LogError("Player profile not found.");
+                return 0;
+            }
+
+            PlayerProfile profile = snapshot.ConvertTo<PlayerProfile>();
+
+            Debug.Log("Selected Character : " + profile.selectedCharacter);
+
+            return profile.selectedCharacter;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Failed to load selected character: " + ex.Message);
+            return 0;
+        }
+    }
 }

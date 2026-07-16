@@ -5138,6 +5138,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245270839}
   m_CullTransparentMesh: 1
+--- !u!1 &1247848126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247848128}
+  - component: {fileID: 1247848127}
+  m_Layer: 0
+  m_Name: Firebase Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1247848127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247848126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5f6fcc5068dc3419abd67e025544c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AuthenticationManager
+--- !u!4 &1247848128
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247848126}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1119.3427, y: 623.76624, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1255817607
 GameObject:
   m_ObjectHideFlags: 0
@@ -5239,7 +5283,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1274199073}
-  - component: {fileID: 1274199072}
   - component: {fileID: 1274199071}
   - component: {fileID: 1274199070}
   - component: {fileID: 1274199069}
@@ -5319,22 +5362,10 @@ MonoBehaviour:
   loginPanel: {fileID: 1435973528}
   signupPanel: {fileID: 549518211}
   characterSelectionPanel: {fileID: 171720376}
-  menuPanel: {fileID: 0}
+  menuPanel: {fileID: 143669149}
   gotoSignupButton: {fileID: 361449916}
   gotoLoginButton: {fileID: 1775332119}
   selectedCharacter: 1
---- !u!114 &1274199072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274199067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5f6fcc5068dc3419abd67e025544c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AuthenticationManager
 --- !u!4 &1274199073
 Transform:
   m_ObjectHideFlags: 0
@@ -8417,6 +8448,7 @@ SceneRoots:
   - {fileID: 2109643792}
   - {fileID: 2000222141}
   - {fileID: 1274199073}
+  - {fileID: 1247848128}
   - {fileID: 112558716}
   - {fileID: 33697222}
   - {fileID: 1756637452}
