@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
+  <string name="gcm_defaultSenderId" translatable="false">492851442752</string>
+  <string name="google_storage_bucket" translatable="false">zombiemulti-f8b49.firebasestorage.app</string>
+  <string name="project_id" translatable="false">zombiemulti-f8b49</string>
+  <string name="google_api_key" translatable="false">AIzaSyAte33tosJg03s7V6p8_A0XjYGiHhlYu8c</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAte33tosJg03s7V6p8_A0XjYGiHhlYu8c</string>
+  <string name="google_app_id" translatable="false">1:492851442752:android:59288aef8e4e8bbf129ba5</string>
+</resources>

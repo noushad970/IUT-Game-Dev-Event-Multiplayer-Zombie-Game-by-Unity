@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Firebase.Firestore;
 
 public class CharacterSelectionUI : MonoBehaviour
 {
@@ -21,8 +18,10 @@ public class CharacterSelectionUI : MonoBehaviour
     public int SelectedCharacterID { get; private set; } = 1;
 
     public event Action<int> OnCharacterConfirmed;
+
     [Header("Panels")]
-    public GameObject authenticationPanel, MainMenuPanel;
+    public GameObject authenticationPanel;
+    public GameObject MainMenuPanel;
 
     private void Awake()
     {
@@ -54,55 +53,51 @@ public class CharacterSelectionUI : MonoBehaviour
         if (character2Selected != null)
             character2Selected.SetActive(characterID == 2);
 
-        Debug.Log($"Character {characterID} Selected");
+        Debug.Log("Character " + characterID + " Selected");
     }
 
-    private async void ConfirmSelection()
+    private void ConfirmSelection()
     {
         continueButton.interactable = false;
 
         Debug.Log("Saving selected character...");
 
-        try
+        AuthenticationManager auth = AuthenticationManager.Instance;
+
+        if (auth == null)
         {
-            string uid = AuthenticationManager.Instance.GetUID();
-
-            if (string.IsNullOrEmpty(uid))
-            {
-                Debug.LogError("No logged in user found.");
-
-                continueButton.interactable = true;
-                return;
-            }
-
-            DocumentReference doc =
-                AuthenticationManager.Instance
-                .Firestore
-                .Collection("players")
-                .Document(uid);
-
-            Dictionary<string, object> updates =
-                new Dictionary<string, object>()
-                {
-                    { "selectedCharacter", SelectedCharacterID }
-                };
-
-            await doc.UpdateAsync(updates);
-
-            Debug.Log("Character saved successfully.");
-
-            OnCharacterConfirmed?.Invoke(SelectedCharacterID);
-
-            // Load Main Menu
-            MainMenuPanel.SetActive(true);
-            authenticationPanel.SetActive(false);
-
+            Debug.LogError("AuthenticationManager not found.");
+            continueButton.interactable = true;
+            return;
         }
-        catch (Exception e)
+
+        if (!auth.IsLoggedIn())
         {
-            Debug.LogError("Failed to save character.");
-            Debug.LogException(e);
+            Debug.LogError("No logged in user.");
+            continueButton.interactable = true;
+            return;
         }
+
+        if (auth.CurrentProfile == null)
+        {
+            Debug.LogError("Player profile not loaded.");
+            continueButton.interactable = true;
+            return;
+        }
+
+        // Update local profile
+        auth.CurrentProfile.selectedCharacter = SelectedCharacterID;
+
+        // Save to PlayFab
+        auth.SavePlayerProfile();
+
+        Debug.Log("Character saved successfully.");
+
+        OnCharacterConfirmed?.Invoke(SelectedCharacterID);
+
+        // Show Main Menu
+        MainMenuPanel.SetActive(true);
+        authenticationPanel.SetActive(false);
 
         continueButton.interactable = true;
     }

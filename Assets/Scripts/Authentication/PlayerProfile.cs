@@ -1,18 +1,36 @@
-using Firebase.Firestore;   // ← Important
+using System;
 
-[FirestoreData]   // ← Add this attribute
+[Serializable]
 public class PlayerProfile
 {
-    [FirestoreProperty] public string uid { get; set; }
-    [FirestoreProperty] public string username { get; set; }
-    [FirestoreProperty] public string email { get; set; }
-    [FirestoreProperty] public int coins { get; set; }
-    [FirestoreProperty] public int selectedCharacter { get; set; }
-    [FirestoreProperty] public int totalSingleKills { get; set; }
-    [FirestoreProperty] public int totalMultiKills { get; set; }
-    [FirestoreProperty] public int highestWave { get; set; }
-    [FirestoreProperty] public int gamesPlayed { get; set; }
+    public string uid;
+    public string username;
+    public string email;
 
-    // Parameterless constructor is required by Firestore
-    public PlayerProfile() { }
+    public int coins;
+
+    public int selectedCharacter;
+
+    public int totalSingleKills;
+    public int totalMultiKills;
+
+    public int highestWave;
+    public int gamesPlayed;
+
+    public PlayerProfile()
+    {
+        uid = "";
+        username = "";
+        email = "";
+
+        coins = 100;
+
+        selectedCharacter = 1;
+
+        totalSingleKills = 0;
+        totalMultiKills = 0;
+
+        highestWave = 0;
+        gamesPlayed = 0;
+    }
 }

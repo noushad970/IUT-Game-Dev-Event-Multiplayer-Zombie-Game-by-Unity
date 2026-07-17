@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- Internet -->
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<!-- Check network connection -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!-- WiFi information -->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+	<!-- Keep device awake while playing -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+	<!-- Vibrate (optional) -->
+	<uses-permission android:name="android.permission.VIBRATE" />
+
+	<!-- Microphone (Only if using Photon Voice) -->
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+	<!-- Android 13+ Notification permission (if using Firebase Notifications) -->
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+	<application>
+
+		<!-- Unity Activity -->
+		<activity
+            android:name="com.unity3d.player.UnityPlayerActivity"
+            android:theme="@style/UnityThemeSelector"
+            android:exported="true">
+
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+
+			<meta-data
+                android:name="unityplayer.UnityActivity"
+                android:value="true"/>
+		</activity>
+
+		<!-- Unity GameActivity -->
+		<activity
+            android:name="com.unity3d.player.UnityPlayerGameActivity"
+            android:theme="@style/BaseUnityGameActivityTheme"
+            android:exported="true">
+
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+
+			<meta-data
+                android:name="unityplayer.UnityActivity"
+                android:value="true"/>
+
+			<meta-data
+                android:name="android.app.lib_name"
+                android:value="game"/>
+		</activity>
+
+	</application>
+
+</manifest>

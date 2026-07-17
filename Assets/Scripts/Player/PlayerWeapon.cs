@@ -39,12 +39,13 @@ public class PlayerWeapon : MonoBehaviour
     private Coroutine autoFireRoutine;
 
     public GameObject rifle, pistol;
-
+    private PlayerAudio playerAudio;
     private void Start()
     {
         FindFireButton();
         FindModeButtons();        // ← New
         UpdateModeButtons();      // ← New: Set initial button states
+        playerAudio = GetComponent<PlayerAudio>();
     }
 
     private void Update()
@@ -243,7 +244,19 @@ public class PlayerWeapon : MonoBehaviour
         // Shoot Animation
         //-----------------------------
         if (anim != null)
-            anim.Play("SingleShot");
+        {
+            if (fireMode == FireMode.Single)
+            {
+
+                anim.SetTrigger("SingleShot");
+                playerAudio.PlayPistolShot();
+            }
+            else
+            {
+                anim.SetTrigger("AutoShot");
+                playerAudio.PlayRifleShot();
+            }
+        }
 
         //-----------------------------
         // Raycast

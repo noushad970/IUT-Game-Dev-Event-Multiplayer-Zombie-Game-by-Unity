@@ -18,6 +18,7 @@ public class AuthenticationUIManager : MonoBehaviour
 
     [Header("Selected Character")]
     public int selectedCharacter = 1;
+    public Button signoutButton;
 
     private void Awake()
     {
@@ -39,7 +40,14 @@ public class AuthenticationUIManager : MonoBehaviour
         if (gotoLoginButton != null)
             gotoLoginButton.onClick.AddListener(GotoLogin);
 
+        if (signoutButton != null)
+            signoutButton.onClick.AddListener(SignOut);
+
         ShowLoginPanel();
+    }
+    void SignOut()
+    {
+        AuthenticationManager.Instance.Logout();
     }
 
     #region Panel Control
