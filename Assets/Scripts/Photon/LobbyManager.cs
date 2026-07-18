@@ -34,6 +34,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
         createRoomButton.onClick.AddListener(CreateRoom);
 
         browseRoomsButton.onClick.AddListener(OpenRoomList);
@@ -41,7 +45,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         roomListPanel.SetActive(false);
     }
-    
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("Connected To Master");
+
+        PhotonNetwork.JoinLobby();
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("Joined Lobby");
+    }
+
     void SetDebug(string message)
     {
         Debug.Log(message);

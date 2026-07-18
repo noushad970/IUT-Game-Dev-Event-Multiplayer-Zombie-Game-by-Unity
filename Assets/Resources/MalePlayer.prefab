@@ -736,7 +736,6 @@ GameObject:
   - component: {fileID: 8952986044394786091}
   - component: {fileID: 6846831585202824582}
   - component: {fileID: 2582178255879680216}
-  - component: {fileID: 7023779685926724206}
   - component: {fileID: 7089825204210014604}
   - component: {fileID: 7866451927924406322}
   - component: {fileID: 5811391176620787047}
@@ -745,6 +744,8 @@ GameObject:
   - component: {fileID: 7789969393262122293}
   - component: {fileID: 4945133494839708839}
   - component: {fileID: 2286300262213274136}
+  - component: {fileID: 8660145254234419206}
+  - component: {fileID: 8992792508245452495}
   m_Layer: 7
   m_Name: Male
   m_TagString: Untagged
@@ -846,20 +847,6 @@ CapsuleCollider:
   m_Height: 1.59
   m_Direction: 1
   m_Center: {x: 0, y: 0.8, z: 0}
---- !u!114 &7023779685926724206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2384861188318391790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 349f17762acb86e4ebf52cb8a3cc2560, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  health: 100
-  player: {fileID: 8253740502433880063}
 --- !u!114 &7089825204210014604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,6 +989,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: AutoShot
+  - Type: 9
+    SynchronizeType: 2
+    Name: Died
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -1026,6 +1016,39 @@ MonoBehaviour:
   stepInterval: 0.45
   minMoveSpeed: 0.1
   runSound: {fileID: 0}
+--- !u!114 &8660145254234419206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2384861188318391790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d474b5c097ad97642952f919d87e3ccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsMulti
+  zombieKills: 0
+  coinsEarnedThisMatch: 0
+  zombieReward: 10
+  bossReward: 500
+  deathPanel: {fileID: 0}
+--- !u!114 &8992792508245452495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2384861188318391790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80cf0e6121820c74ba251e41341e9f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthMulti
+  maxHealth: 100
+  currentHealth: 0
+  player: {fileID: 8253740502433880063}
+  destroyDelay: 3
 --- !u!1 &2589968395544887851
 GameObject:
   m_ObjectHideFlags: 0

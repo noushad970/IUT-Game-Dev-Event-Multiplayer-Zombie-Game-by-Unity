@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;   // ← Added this
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Joystick")]
-    private FixedJoystick joystick;
+    [Header("Joysticks")]
+    private FixedJoystick movementJoystick;
+    private FixedJoystick shotJoystick;
     private Button jumpButton;
 
     [Header("Movement")]
@@ -25,42 +26,79 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGrounded;
     private bool isJumping;
+    private PlayerWeapon playerWeapon;
+
+    private bool wasAiming = false;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        rb.constraints = RigidbodyConstraints.FreezeRotationX |
-                         RigidbodyConstraints.FreezeRotationZ;
+
+        rb.constraints =
+            RigidbodyConstraints.FreezeRotationX |
+            RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void Start()
     {
-        FindJoystick();
+        playerWeapon = GetComponent<PlayerWeapon>();
+        FindMovementJoystick();
+        FindShotJoystick();
         FindJumpButton();
+    }
+
+    //---------------------------------------------------
+    // Find References
+    //---------------------------------------------------
+
+    private void FindMovementJoystick()
+    {
+        MovementJoystickRef obj =
+            FindFirstObjectByType<MovementJoystickRef>();
+
+        if (obj != null)
+            movementJoystick = obj.GetComponent<FixedJoystick>();
+        else
+            Debug.LogWarning("MovementJoystickRef not found.");
+    }
+
+    private void FindShotJoystick()
+    {
+        ShotJoystickRef obj =
+            FindFirstObjectByType<ShotJoystickRef>();
+
+        if (obj != null)
+            shotJoystick = obj.GetComponent<FixedJoystick>();
+        else
+            Debug.LogWarning("ShotJoystickRef not found.");
     }
 
     private void FindJumpButton()
     {
-        jumpButton = FindFirstObjectByType<JumpRef>().GetComponent<Button>();
-        if (jumpButton == null)
-            Debug.LogWarning("Jump Button not found in the scene.");
-        else
+        JumpRef jump =
+            FindFirstObjectByType<JumpRef>();
+
+        if (jump == null)
+        {
+            Debug.LogWarning("JumpRef not found.");
+            return;
+        }
+
+        jumpButton = jump.GetComponent<Button>();
+
+        if (jumpButton != null)
             jumpButton.onClick.AddListener(Jump);
     }
 
-    private void FindJoystick()
-    {
-        joystick = FindFirstObjectByType<FixedJoystick>();
-
-        if (joystick == null)
-            Debug.LogWarning("FixedJoystick not found in the scene.");
-    }
+    //---------------------------------------------------
+    // Update
+    //---------------------------------------------------
 
     private void Update()
     {
-        // Keyboard Jump (Space)
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current != null &&
+            Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             Jump();
         }
@@ -68,26 +106,31 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (joystick == null)
+        if (movementJoystick == null)
             return;
 
         CheckGround();
         MovePlayer();
     }
 
+    //---------------------------------------------------
+    // Ground
+    //---------------------------------------------------
+
     private void CheckGround()
     {
         isGrounded = Physics.CheckSphere(
             groundCheck.position,
             groundCheckRadius,
-            groundLayer
-        );
+            groundLayer);
 
         if (isGrounded)
-        {
             isJumping = false;
-        }
     }
+
+    //---------------------------------------------------
+    // Jump
+    //---------------------------------------------------
 
     public void Jump()
     {
@@ -96,77 +139,182 @@ public class PlayerMovement : MonoBehaviour
 
         isJumping = true;
 
-        // Play animation
         anim.Play("Jump");
 
-        // Clear downward velocity before jumping
         rb.linearVelocity = new Vector3(
             rb.linearVelocity.x,
-            0f,
-            rb.linearVelocity.z
-        );
+            0,
+            rb.linearVelocity.z);
 
-        // Apply jump force
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        Debug.Log("Player Jumped");
+        rb.AddForce(
+            Vector3.up * jumpForce,
+            ForceMode.Impulse);
     }
+
+    //---------------------------------------------------
+    // Movement
+    //---------------------------------------------------
 
     private void MovePlayer()
     {
-        // === Keyboard Input (WASD + Arrow Keys) using New Input System ===
+        //-----------------------------------
+        // Keyboard Input
+        //-----------------------------------
+
         Vector2 keyboardInput = Vector2.zero;
 
         if (Keyboard.current != null)
         {
-            float horizontal = 0f;
-            float vertical = 0f;
+            float h = 0;
+            float v = 0;
 
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) horizontal -= 1f;
-            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) horizontal += 1f;
-            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) vertical += 1f;
-            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) vertical -= 1f;
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+                h--;
 
-            keyboardInput = new Vector2(horizontal, vertical);
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                h++;
+
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+                v++;
+
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+                v--;
+
+            keyboardInput = new Vector2(h, v);
         }
 
-        // Joystick input
-        Vector3 joystickMovement = new Vector3(
-            joystick.Horizontal,
-            0f,
-            joystick.Vertical
-        );
+        //-----------------------------------
+        // Movement
+        //-----------------------------------
 
-        // Combine both inputs
-        Vector3 keyboardMovement = new Vector3(keyboardInput.x, 0f, keyboardInput.y);
-        movement = joystickMovement + keyboardMovement;
+        Vector3 joystickMove =
+            new Vector3(
+                movementJoystick.Horizontal,
+                0,
+                movementJoystick.Vertical);
 
-        if (movement.magnitude > 0f)
+        Vector3 keyboardMove =
+            new Vector3(
+                keyboardInput.x,
+                0,
+                keyboardInput.y);
+
+        movement = joystickMove + keyboardMove;
+
+        if (movement.magnitude > 1f)
+            movement.Normalize();
+
+        //-----------------------------------
+        // Animation
+        //-----------------------------------
+
+        anim.SetBool("Running", movement.sqrMagnitude > 0.01f);
+
+        //-----------------------------------
+        // Move Player
+        //-----------------------------------
+
+        Vector3 newPos =
+            rb.position +
+            movement *
+            moveSpeed *
+            Time.fixedDeltaTime;
+
+        rb.MovePosition(newPos);
+
+        //-----------------------------------
+        // Shot Joystick
+        //-----------------------------------
+
+        Vector3 lookDirection = Vector3.zero;
+
+        bool aiming = false;
+
+        if (shotJoystick != null)
         {
-            anim.SetBool("Running", true);
+            lookDirection = new Vector3(
+                shotJoystick.Horizontal,
+                0,
+                shotJoystick.Vertical);
+
+            aiming = lookDirection.magnitude > 0.2f;
         }
-        else
+
+        //-----------------------------------
+        // Rotate Player
+        //-----------------------------------
+
+        if (aiming)
         {
-            anim.SetBool("Running", false);
+            Quaternion targetRotation =
+                Quaternion.LookRotation(lookDirection.normalized);
+
+            rb.MoveRotation(
+                Quaternion.Slerp(
+                    rb.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.fixedDeltaTime));
+        }
+        else if (movement.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation =
+                Quaternion.LookRotation(movement);
+
+            rb.MoveRotation(
+                Quaternion.Slerp(
+                    rb.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.fixedDeltaTime));
         }
 
-        if (movement.sqrMagnitude < 0.01f)
-            return;
+        //-----------------------------------
+        // Auto Fire Using Aim Joystick
+        //-----------------------------------
 
-        movement.Normalize();
+        if (playerWeapon != null && shotJoystick != null)
+        {
+            aiming = shotJoystick.Direction.magnitude > 0.2f;
 
-        Vector3 newPosition = rb.position + movement * moveSpeed * Time.fixedDeltaTime;
+            if (aiming)
+            {
+                if (!wasAiming)
+                {
+                    wasAiming = true;
+                    playerWeapon.StartFire();
+                }
+            }
+            else
+            {
+                if (wasAiming)
+                {
+                    wasAiming = false;
+                    playerWeapon.StopFire();
+                }
+            }
+        }
+    }
 
-        rb.MovePosition(newPosition);
+    //---------------------------------------------------
+    // Public
+    //---------------------------------------------------
 
-        Quaternion targetRotation = Quaternion.LookRotation(movement);
+    public Vector3 GetShootDirection()
+    {
+        if (shotJoystick != null)
+        {
+            Vector3 dir =
+                new Vector3(
+                    shotJoystick.Horizontal,
+                    0,
+                    shotJoystick.Vertical);
 
-        rb.MoveRotation(
-            Quaternion.Slerp(
-                rb.rotation,
-                targetRotation,
-                rotationSpeed * Time.fixedDeltaTime
-            )
-        );
+            if (dir.sqrMagnitude > 0.01f)
+                return dir.normalized;
+        }
+
+        if (transform.forward.sqrMagnitude > 0.01f)
+            return transform.forward;
+
+        return Vector3.forward;
     }
 }

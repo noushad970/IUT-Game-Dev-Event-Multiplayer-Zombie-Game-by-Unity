@@ -1,46 +1,44 @@
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BulletTracerMulti : MonoBehaviourPun
 {
     public float speed = 80f;
 
+    [Header("Lifetime")]
+    public float lifeTime = 5f;
+
     private void Start()
     {
-        // Auto destroy after some time to prevent leaks
+        // Only the owner is responsible for destroying the network object
         if (photonView.IsMine)
         {
-            Invoke(nameof(DestroySelf), 3f);
+            Invoke(nameof(DestroySelf), lifeTime);
         }
     }
 
     private void Update()
     {
-        // Move the tracer forward
         transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Only process collision on the owner to avoid duplicate effects
-        if (!photonView.IsMine) return;
+        // Only owner handles collision
+        if (!photonView.IsMine)
+            return;
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            // Trigger blood effect on all clients
-            // photonView.RPC("RPC_PlayBloodEffect", RpcTarget.All, transform.position);
-
-            // Destroy bullet on all clients
-            PhotonNetwork.Destroy(gameObject);
+            DestroySelf();
         }
     }
 
-
-
     private void DestroySelf()
     {
-        if (photonView.IsMine)
+        if (photonView != null &&
+            photonView.IsMine &&
+            photonView.gameObject != null)
         {
             PhotonNetwork.Destroy(gameObject);
         }

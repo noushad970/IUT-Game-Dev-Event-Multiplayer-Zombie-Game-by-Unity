@@ -25,7 +25,7 @@ public class PlayerHealth : MonoBehaviour
     void playerDied()
     {
         Animator anim=GetComponent<Animator>();
-        anim.Play("Died");
+        anim.SetTrigger("Died");
         Destroy(player,3f);
     }
 }

@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 6142494969318489119}
   - component: {fileID: 2841476105711369789}
   - component: {fileID: 4541080637502050812}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HP_Golem Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}

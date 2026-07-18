@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class CharacterSelectionUI : MonoBehaviour
 {
-    public static CharacterSelectionUI Instance;
 
     [Header("Buttons")]
     [SerializeField] private Button character1Button;
@@ -14,24 +13,18 @@ public class CharacterSelectionUI : MonoBehaviour
     [Header("Selection Indicator")]
     [SerializeField] private GameObject character1Selected;
     [SerializeField] private GameObject character2Selected;
-
+    public UIManager manager;
     public int SelectedCharacterID { get; private set; } = 1;
 
     public event Action<int> OnCharacterConfirmed;
 
     [Header("Panels")]
     public GameObject authenticationPanel;
-    public GameObject MainMenuPanel;
+    public GameObject MainMenuPanel,menuButtons;
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+       
 
         character1Button.onClick.AddListener(() => SelectCharacter(1));
         character2Button.onClick.AddListener(() => SelectCharacter(2));
@@ -97,8 +90,9 @@ public class CharacterSelectionUI : MonoBehaviour
 
         // Show Main Menu
         MainMenuPanel.SetActive(true);
+        menuButtons.SetActive(true);
         authenticationPanel.SetActive(false);
-
+        manager.loadPlayerAgain();
         continueButton.interactable = true;
     }
 

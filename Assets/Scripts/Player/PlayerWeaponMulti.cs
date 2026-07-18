@@ -170,7 +170,7 @@ public class PlayerWeaponMulti : MonoBehaviourPun
     //=========================================
     // START / STOP FIRE
     //=========================================
-    void StartFire()
+    public void StartFire()
     {
         if (fireMode == FireMode.Single)
         {
@@ -184,7 +184,7 @@ public class PlayerWeaponMulti : MonoBehaviourPun
         }
     }
 
-    void StopFire()
+    public void StopFire()
     {
         isHoldingFire = false;
         if (autoFireRoutine != null)
@@ -233,7 +233,11 @@ public class PlayerWeaponMulti : MonoBehaviourPun
             shootDirection.forward);
 
         // Local Raycast + Damage
-        Vector3 direction = shootDirection.forward;
+        PlayerMovementMulti movement = GetComponent<PlayerMovementMulti>();
+
+        Vector3 direction = movement != null
+            ? movement.GetShootDirection()
+            : shootDirection.forward;
         Ray ray = new Ray(firePoint.position, direction);
         Vector3 hitPoint = firePoint.position + direction * fireDistance;
 
@@ -242,13 +246,18 @@ public class PlayerWeaponMulti : MonoBehaviourPun
             Debug.Log("Hit : " + hit.collider.name);
             hitPoint = hit.point;
 
-            EnemyHealth zombie = hit.collider.GetComponent<EnemyHealth>();
+            EnemyHealthMulti zombie = hit.collider.GetComponent<EnemyHealthMulti>();
+
             if (zombie == null)
-                zombie = hit.collider.GetComponentInParent<EnemyHealth>();
+                zombie = hit.collider.GetComponentInParent<EnemyHealthMulti>();
 
             if (zombie != null)
             {
-                zombie.TakeDamage(damage, gameObject);
+                zombie.photonView.RPC(
+                    nameof(EnemyHealthMulti.RPC_RequestDamage),
+                    RpcTarget.MasterClient,
+                    damage,
+                    PhotonNetwork.LocalPlayer.ActorNumber);
             }
         }
 

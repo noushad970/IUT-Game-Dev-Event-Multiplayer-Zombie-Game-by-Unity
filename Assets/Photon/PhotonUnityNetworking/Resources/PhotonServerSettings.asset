@@ -44,6 +44,15 @@ MonoBehaviour:
   - RPC_PlayBloodEffect
   - RPC_PlayShootAnimation
   - RPC_SetFireMode
+  - RPC_Die
+  - RPC_PlayBlood
+  - RPC_PlayHitEffect
+  - RPC_UpdateKills
+  - RPC_UpdateStats
+  - RPC_UpdateHealth
+  - RPC_EndGame
+  - RPC_StartTimer
+  - RPC_RequestDamage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

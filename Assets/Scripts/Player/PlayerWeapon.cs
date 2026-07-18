@@ -172,7 +172,7 @@ public class PlayerWeapon : MonoBehaviour
     //=========================================
     // START / STOP FIRE
     //=========================================
-    void StartFire()
+    public void StartFire()
     {
         if (fireMode == FireMode.Single)
         {
@@ -186,7 +186,7 @@ public class PlayerWeapon : MonoBehaviour
         }
     }
 
-    void StopFire()
+    public void StopFire()
     {
         isHoldingFire = false;
         if (autoFireRoutine != null)
@@ -261,7 +261,14 @@ public class PlayerWeapon : MonoBehaviour
         //-----------------------------
         // Raycast
         //-----------------------------
-        Vector3 direction = shootDirection.forward;
+        PlayerMovement movement = GetComponent<PlayerMovement>();
+
+        Vector3 direction;
+
+        if (movement != null)
+            direction = movement.GetShootDirection();
+        else
+            direction = shootDirection.forward;
         Ray ray = new Ray(firePoint.position, direction);
         Vector3 hitPoint = firePoint.position + direction * fireDistance;
 
