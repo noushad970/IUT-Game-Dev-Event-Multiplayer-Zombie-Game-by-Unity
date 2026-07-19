@@ -14,6 +14,8 @@ public class LoginUI : MonoBehaviour
     // Load Main Menu
     [Header("Panels")]
     public GameObject authenticationPanel, MainMenuPanel;
+    public LoadPlayerInfo loadPlayerInfo;
+    public TextMeshProUGUI notificationText;
     private void Awake()
     {
         loginButton.onClick.AddListener(Login);
@@ -36,12 +38,14 @@ public class LoginUI : MonoBehaviour
         if (string.IsNullOrWhiteSpace(username))
         {
             Debug.LogError("Username cannot be empty.");
+            showNotification("Username cannot be empty.");
             return;
         }
 
         if (username.Length < 3)
         {
             Debug.LogError("Username must be at least 3 characters.");
+            showNotification("Username must be at least 3 characters.");
             return;
         }
 
@@ -49,6 +53,7 @@ public class LoginUI : MonoBehaviour
         if (string.IsNullOrWhiteSpace(password))
         {
             Debug.LogError("Password cannot be empty.");
+            showNotification("Password cannot be empty.");
             return;
         }
 
@@ -66,7 +71,8 @@ public class LoginUI : MonoBehaviour
         if (success)
         {
             Debug.Log("Login Successful.");
-
+            showNotification("Login Successful.");
+            loadPlayerInfo.loadPlayerInfo();
             // TODO:
             // Load player profile from Firestore
             // SceneManager.LoadScene("MainMenu");
@@ -78,6 +84,12 @@ public class LoginUI : MonoBehaviour
         else
         {
             Debug.LogError("Login Failed.");
+            showNotification("Login failed, Please try again.....");
         }
+    }
+    void showNotification(string message)
+    {
+        notificationText.gameObject.SetActive(true);
+        notificationText.text = message;
     }
 }

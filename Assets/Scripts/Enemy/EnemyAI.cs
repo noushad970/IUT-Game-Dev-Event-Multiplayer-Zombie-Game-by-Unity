@@ -151,6 +151,7 @@ public class EnemyAI : MonoBehaviour
         if (anim != null)
         {
             anim.SetBool("Walk", true);
+            EnemyAudio.Instance.StartFootsteps();
         }
     }
 
@@ -160,6 +161,7 @@ public class EnemyAI : MonoBehaviour
         if (anim != null)
         {
             anim.SetBool("Walk", false);
+            EnemyAudio.Instance.StopFootsteps();
         }
         Vector3 direction = target.position - transform.position;
         direction.y = 0;
@@ -189,7 +191,11 @@ public class EnemyAI : MonoBehaviour
                 if (anim != null)
                 {
                     anim.SetBool("Walk", false);
+
+                    EnemyAudio.Instance.StopFootsteps();
                     anim.Play("Attack01");
+                    CameraShake.shakeCamera = true;
+                    EnemyAudio.Instance.PlayAttack();
                     StartCoroutine(playHitEffect());
 
                 }

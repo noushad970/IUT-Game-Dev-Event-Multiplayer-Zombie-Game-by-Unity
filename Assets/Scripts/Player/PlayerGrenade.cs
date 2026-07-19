@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -52,7 +53,12 @@ public class PlayerGrenade : MonoBehaviour
             Debug.Log("Grenade Button Initialized.");
         }
     }
-
+    IEnumerator explodeSound()
+    {
+        yield return new WaitForSeconds(3f);
+        PlayerAudio playerAudio = GetComponent<PlayerAudio>();
+        playerAudio.grenadeSound.Play();
+    }
     public void ThrowGrenade()
     {
         // Cooldown Check
@@ -99,6 +105,9 @@ public class PlayerGrenade : MonoBehaviour
         }
 
         Debug.Log("Grenade Thrown");
+
+        StartCoroutine(explodeSound());
+        CameraShake.shakeCamera = true;
     }
 
     public float GetRemainingCooldown()

@@ -22,11 +22,13 @@ public class EnemyHealth : MonoBehaviour
     private bool isDead = false;
 
     public ParticleSystem bloodParticle;
-
+    public bool isBoss = false,bossDied = false;
+    public static bool isBossDead = false;
     private void Awake()
     {
         currentHealth = maxHealth;
         FindSpawner();
+        isBossDead = false;
 
     }
     void FindSpawner()
@@ -45,7 +47,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage, GameObject attacker)
     {
         if (isDead)
-            return;
+            return; 
 
         currentHealth -= damage;
 
@@ -65,8 +67,14 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<EnemyAI>().stopMovement();
+        EnemyAudio.Instance.PlayDie();
         Debug.Log($"{name} died.");
         spawner.zombieDiedCount();
+        if (isBoss)
+        {
+            ZombieSpawner.totalCoinEarned += 200;
+            isBossDead = true;
+        }
         // Give kill to attacker
         //if (attacker != null)
         //{
@@ -84,6 +92,9 @@ public class EnemyHealth : MonoBehaviour
         if (anim != null)
         {
             anim.Play("Die");
+            ZombieSpawner.offlineZombieDiedCount++;
+            ZombieSpawner.totalCoinEarned += 10;
+            EnemyAudio.Instance.PlayDie();
         }
         // Disable enemy behaviour
         MonoBehaviour[] scripts = GetComponents<MonoBehaviour>();

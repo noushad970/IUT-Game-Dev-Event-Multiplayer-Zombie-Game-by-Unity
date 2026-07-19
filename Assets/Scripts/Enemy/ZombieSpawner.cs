@@ -26,6 +26,7 @@ public class ZombieSpawner : MonoBehaviour
 
     private int spawnedCount;
     private bool bossSpawned;
+    public static int offlineZombieDiedCount = 0,totalCoinEarned=0;
 
     private void Start()
     {
@@ -34,6 +35,8 @@ public class ZombieSpawner : MonoBehaviour
         if (spawnOnStart)
             StartSpawning();
         totalZombieDied = 0;
+        offlineZombieDiedCount = 0;
+        totalCoinEarned = 0;
     }
 
     private void LateUpdate()

@@ -20,20 +20,20 @@ public class PlayerAudio : MonoBehaviour
     {
         // Change this according to your movement script
 
-        //if (isMoving)
-        //{
-        //    stepTimer += Time.deltaTime;
+        if (isMoving)
+        {
+            stepTimer += Time.deltaTime;
 
-        //    if (stepTimer >= stepInterval)
-        //    {
-        //        PlayFootstep();
-        //        stepTimer = 0f;
-        //    }
-        //}
-        //else
-        //{
-        //    stepTimer = stepInterval;
-        //}
+            if (stepTimer >= stepInterval)
+            {
+                PlayFootstep();
+                stepTimer = 0f;
+            }
+        }
+        else
+        {
+            stepTimer = stepInterval;
+        }
     }
 
     public void PlayFootstep()

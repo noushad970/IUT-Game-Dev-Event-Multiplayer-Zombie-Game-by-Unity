@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class AuthenticationUIManager : MonoBehaviour
 {
     public static AuthenticationUIManager Instance;
+    public LoadPlayerInfo loadPlayerInfo;
 
     [Header("Panels")]
     public GameObject loginPanel;
@@ -82,6 +83,7 @@ public class AuthenticationUIManager : MonoBehaviour
         signupPanel.SetActive(false);
         characterSelectionPanel.SetActive(false);
         menuPanel.SetActive(false);
+        loadPlayerInfo.loadPlayerInfo();
     }
 
     #endregion
