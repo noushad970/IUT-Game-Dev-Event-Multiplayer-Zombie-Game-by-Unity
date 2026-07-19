@@ -87,7 +87,7 @@ public class RegisterUI : MonoBehaviour
         }
 
         // Generate Firebase Email
-        string email = username;
+        string email = username + "@gmail.com";
 
         Debug.Log("Username : " + username);
         Debug.Log("Generated Email : " + email);

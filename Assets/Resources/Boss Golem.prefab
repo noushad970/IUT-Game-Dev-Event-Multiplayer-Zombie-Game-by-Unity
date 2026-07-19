@@ -209,7 +209,6 @@ GameObject:
   - component: {fileID: -7407221515157525438}
   - component: {fileID: 1299499332019334569}
   - component: {fileID: 6520580434991343435}
-  - component: {fileID: -8954877458537196933}
   m_Layer: 6
   m_Name: Boss Golem
   m_TagString: Untagged
@@ -379,7 +378,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -7407221515157525438}
   - {fileID: 1299499332019334569}
-  - {fileID: -8954877458537196933}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -470,22 +469,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-8954877458537196933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908903480072239720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonRigidbodyView
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &1071343233682511329
 GameObject:
   m_ObjectHideFlags: 0

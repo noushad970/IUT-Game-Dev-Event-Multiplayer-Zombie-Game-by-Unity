@@ -6041,7 +6041,6 @@ GameObject:
   - component: {fileID: 6818482781236971366}
   - component: {fileID: 2748466671753339591}
   - component: {fileID: -5797851094839276035}
-  - component: {fileID: -9005822675835471525}
   m_Layer: 6
   m_Name: EvilMagePAMaskTint
   m_TagString: Untagged
@@ -6177,6 +6176,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   bloodParticle: {fileID: 8333622220922492245}
+  isBoss: 0
 --- !u!114 &4308265113333962826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6210,7 +6210,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 6818482781236971366}
   - {fileID: 2748466671753339591}
-  - {fileID: -9005822675835471525}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -6301,22 +6301,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-9005822675835471525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5365168507357031497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonRigidbodyView
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &5456215974412763434
 GameObject:
   m_ObjectHideFlags: 0

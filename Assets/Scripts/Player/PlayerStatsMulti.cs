@@ -19,10 +19,21 @@ public class PlayerStatsMulti : MonoBehaviourPun
 
     private bool uiInitialized;
 
+    // Local player's match stats only
+    public static int totalKillsMutli = 0;
+    public static int bossKilledMulti = 0;
+    public static int coinsEarnedThisMatchMulti = 0;
+
     private void Awake()
     {
         if (photonView.IsMine)
+        {
             LocalPlayer = this;
+
+            totalKillsMutli = 0;
+            bossKilledMulti = 0;
+            coinsEarnedThisMatchMulti = 0;
+        }
     }
 
     private void Start()
@@ -35,15 +46,15 @@ public class PlayerStatsMulti : MonoBehaviourPun
     {
         while (!uiInitialized)
         {
-            ScoreRef scoreRef = FindAnyObjectByType<ScoreRef>(FindObjectsInactive.Include);
+            ScoreRef scoreRef =
+                FindAnyObjectByType<ScoreRef>(FindObjectsInactive.Include);
+
             if (scoreRef != null)
             {
                 deathPanel = scoreRef.gameObject;
                 deathPanel.SetActive(false);
 
                 uiInitialized = true;
-
-                Debug.Log("Death Panel Initialized.");
                 yield break;
             }
 
@@ -61,6 +72,8 @@ public class PlayerStatsMulti : MonoBehaviourPun
     }
 
     //----------------------------------------------------
+    // BOSS
+    //----------------------------------------------------
 
     public void AddBossKill()
     {
@@ -68,11 +81,14 @@ public class PlayerStatsMulti : MonoBehaviourPun
     }
 
     //----------------------------------------------------
+    // ADD KILL
+    //----------------------------------------------------
 
     void AddKill(bool boss)
     {
-        if (!photonView.IsMine)
-            return;
+        // IMPORTANT:
+        // Don't use photonView.IsMine here.
+        // This is executed on the Master Client.
 
         zombieKills++;
 
@@ -80,36 +96,39 @@ public class PlayerStatsMulti : MonoBehaviourPun
 
         coinsEarnedThisMatch += reward;
 
-        KillBoard.myKills = zombieKills;
-
-        AuthenticationManager.Instance.CurrentProfile.coins += reward;
-        AuthenticationManager.Instance.CurrentProfile.totalMultiKills++;
-
-        AuthenticationManager.Instance.SavePlayerProfile();
-
-        photonView.RPC(nameof(RPC_UpdateStats),
+        photonView.RPC(
+            nameof(RPC_UpdateStats),
             RpcTarget.AllBuffered,
             zombieKills,
             coinsEarnedThisMatch,
-            AuthenticationManager.Instance.CurrentProfile.coins);
+            boss);
     }
 
     //----------------------------------------------------
 
     [PunRPC]
-    void RPC_UpdateStats(int kills, int earnedCoins, int totalCoins)
+    void RPC_UpdateStats(int kills, int earnedCoins, bool boss)
     {
         zombieKills = kills;
         coinsEarnedThisMatch = earnedCoins;
 
-        KillBoard.myKills = zombieKills;
-        KillBoard.totalCoinsEarned = coinsEarnedThisMatch;
+        // Update ONLY the local player's UI/statics
+        if (photonView.IsMine)
+        {
+            totalKillsMutli = zombieKills;
+            coinsEarnedThisMatchMulti = coinsEarnedThisMatch;
+
+            if (boss)
+                bossKilledMulti++;
+
+            KillBoard.myKills = totalKillsMutli;
+            KillBoard.totalCoinsEarned = coinsEarnedThisMatchMulti;
+        }
 
         Debug.Log(
             photonView.Owner.NickName +
             " | Kills : " + zombieKills +
-            " | Match Coins : " + coinsEarnedThisMatch +
-            " | Total Coins : " + totalCoins);
+            " | Match Coins : " + coinsEarnedThisMatch);
 
         if (KillBoard.Instance != null)
             KillBoard.Instance.Refresh();
@@ -124,23 +143,15 @@ public class PlayerStatsMulti : MonoBehaviourPun
 
         if (deathPanel == null)
         {
-            ScoreRef scoreRef = FindAnyObjectByType<ScoreRef>(FindObjectsInactive.Include);
+            ScoreRef scoreRef =
+                FindAnyObjectByType<ScoreRef>(FindObjectsInactive.Include);
 
             if (scoreRef != null)
-            {
                 deathPanel = scoreRef.gameObject;
-            }
         }
 
         if (deathPanel != null)
-        {
             deathPanel.SetActive(true);
-            Debug.Log("Death Panel Opened");
-        }
-        else
-        {
-            Debug.LogError("Death Panel not found.");
-        }
     }
 
     //----------------------------------------------------
@@ -149,5 +160,15 @@ public class PlayerStatsMulti : MonoBehaviourPun
     {
         zombieKills = 0;
         coinsEarnedThisMatch = 0;
+
+        if (photonView.IsMine)
+        {
+            totalKillsMutli = 0;
+            bossKilledMulti = 0;
+            coinsEarnedThisMatchMulti = 0;
+
+            KillBoard.myKills = 0;
+            KillBoard.totalCoinsEarned = 0;
+        }
     }
 }

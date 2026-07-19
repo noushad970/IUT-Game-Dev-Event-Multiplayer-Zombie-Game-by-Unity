@@ -34941,7 +34941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea6c53f87b6f74d4994afc060d5abf65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeapon
-  fireMode: 0
+  fireMode: 1
   singleDamage: 40
   autoDamage: 15
   singleFireRate: 0.4

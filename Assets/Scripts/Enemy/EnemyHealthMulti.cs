@@ -121,7 +121,13 @@ public class EnemyHealthMulti : MonoBehaviourPun
         // Award kill to attacker
         if (attacker != null)
         {
-            PlayerStatsMulti stats = attacker.GetComponentInChildren<PlayerStatsMulti>();
+            PlayerStatsMulti stats = attacker.GetComponent<PlayerStatsMulti>();
+
+            if (stats == null)
+                stats = attacker.GetComponentInChildren<PlayerStatsMulti>();
+
+            if (stats == null)
+                stats = attacker.GetComponentInParent<PlayerStatsMulti>();
 
             if (stats != null)
             {

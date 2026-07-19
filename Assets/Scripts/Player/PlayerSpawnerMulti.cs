@@ -7,6 +7,7 @@ public class PlayerSpawnerMulti : MonoBehaviourPunCallbacks
     [Header("Spawn Points (Assign 4 in Inspector)")]
     public Transform[] spawnPoints;
     public GameObject GameOverPanel;
+
     private void Start()
     {
         SpawnPlayer();

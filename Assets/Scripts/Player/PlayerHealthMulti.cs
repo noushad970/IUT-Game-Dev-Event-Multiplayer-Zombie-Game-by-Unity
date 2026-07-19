@@ -50,7 +50,7 @@ public class PlayerHealthMulti : MonoBehaviourPun
             return;
 
         currentHealth -= damage;
-
+        PlayerHealthBar.currentHealth = currentHealth;
         Debug.Log(photonView.Owner.NickName +
                   " HP : " +
                   currentHealth);

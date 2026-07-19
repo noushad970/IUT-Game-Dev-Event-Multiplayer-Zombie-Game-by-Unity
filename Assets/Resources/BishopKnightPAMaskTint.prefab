@@ -9644,7 +9644,6 @@ GameObject:
   - component: {fileID: 5615609372400241100}
   - component: {fileID: -7935863388402920425}
   - component: {fileID: -5077789347964380385}
-  - component: {fileID: -3727897791822684332}
   m_Layer: 6
   m_Name: BishopKnightPAMaskTint
   m_TagString: Untagged
@@ -9780,6 +9779,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   bloodParticle: {fileID: 5170936698671507349}
+  isBoss: 0
 --- !u!114 &3380752442889804410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9813,7 +9813,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5615609372400241100}
   - {fileID: -7935863388402920425}
-  - {fileID: -3727897791822684332}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -9904,22 +9904,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-3727897791822684332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366017437018866871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonRigidbodyView
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &1572380087778527703
 GameObject:
   m_ObjectHideFlags: 0

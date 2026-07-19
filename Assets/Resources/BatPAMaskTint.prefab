@@ -25054,7 +25054,6 @@ GameObject:
   - component: {fileID: 826728134341524440}
   - component: {fileID: 2354376524438040988}
   - component: {fileID: -4055312757126099313}
-  - component: {fileID: 2940463589328680193}
   m_Layer: 6
   m_Name: BatPAMaskTint
   m_TagString: Untagged
@@ -25190,6 +25189,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   bloodParticle: {fileID: 9165241434441847016}
+  isBoss: 0
 --- !u!114 &-5030205062972811090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25223,7 +25223,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 826728134341524440}
   - {fileID: 2354376524438040988}
-  - {fileID: 2940463589328680193}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -25314,19 +25314,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2940463589328680193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8795762538662485929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonRigidbodyView
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3

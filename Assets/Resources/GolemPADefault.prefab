@@ -20511,7 +20511,6 @@ GameObject:
   - component: {fileID: -1117730252419019134}
   - component: {fileID: 2416405006900207210}
   - component: {fileID: 8620700127917998556}
-  - component: {fileID: -6758929682588954139}
   m_Layer: 6
   m_Name: GolemPADefault
   m_TagString: Untagged
@@ -20626,6 +20625,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   bloodParticle: {fileID: 6996261807311575409}
+  isBoss: 0
 --- !u!114 &6905208632688303597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20680,7 +20680,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -1117730252419019134}
   - {fileID: 2416405006900207210}
-  - {fileID: -6758929682588954139}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -20771,22 +20771,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-6758929682588954139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7538703769275985944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonRigidbodyView
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &7650768176423288322
 GameObject:
   m_ObjectHideFlags: 0
