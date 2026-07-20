@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         jumpButton = jump.GetComponent<Button>();
 
         if (jumpButton != null)
-            jumpButton.onClick.AddListener(Jump);
+            jumpButton.onClick.AddListener(Reload);
     }
 
     //---------------------------------------------------
@@ -98,9 +98,9 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (Keyboard.current != null &&
-            Keyboard.current.spaceKey.wasPressedThisFrame)
+            Keyboard.current.rKey.wasPressedThisFrame)
         {
-            Jump();
+            Reload();
         }
     }
 
@@ -132,23 +132,9 @@ public class PlayerMovement : MonoBehaviour
     // Jump
     //---------------------------------------------------
 
-    public void Jump()
+    public void Reload()
     {
-        if (!isGrounded || isJumping)
-            return;
-
-        isJumping = true;
-
-        anim.Play("Jump");
-
-        rb.linearVelocity = new Vector3(
-            rb.linearVelocity.x,
-            0,
-            rb.linearVelocity.z);
-
-        rb.AddForce(
-            Vector3.up * jumpForce,
-            ForceMode.Impulse);
+        playerWeapon.ReloadGun();
     }
 
     //---------------------------------------------------

@@ -10,7 +10,7 @@ public class PlayerHealthMulti : MonoBehaviourPun
     private int currentHealth;
 
     public bool IsDead => isDead;
-
+    private PlayerAudioMulti playerAudio;
     [Header("Player Root")]
     public GameObject player;
 
@@ -36,6 +36,7 @@ public class PlayerHealthMulti : MonoBehaviourPun
         movement = GetComponent<PlayerMovementMulti>();
         weapon = GetComponent<PlayerWeaponMulti>();
         grenade = GetComponent<PlayerGrenadeMulti>();
+        playerAudio = GetComponent<PlayerAudioMulti>();
     }
 
     //=================================================
@@ -60,6 +61,12 @@ public class PlayerHealthMulti : MonoBehaviourPun
         if (currentHealth <= 0)
         {
             photonView.RPC(nameof(RPC_Die), RpcTarget.All);
+            playerAudio.PlayDeath();
+        }
+        else
+        {
+            if (playerAudio != null)
+                playerAudio.PlayHurt();
         }
     }
 

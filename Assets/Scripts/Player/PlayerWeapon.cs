@@ -37,6 +37,17 @@ public class PlayerWeapon : MonoBehaviour
     private bool isHoldingFire = false;
     private bool canFire = true;
     private Coroutine autoFireRoutine;
+    //============================
+    // Reload
+    //============================
+    [Header("Reload")]
+    public int singleMagazineSize = 6;
+    public int autoMagazineSize = 20;
+    public float reloadTime = 2f;
+
+    private int currentAmmo;
+    private bool isReloading = false;
+
 
     public GameObject rifle, pistol;
     private PlayerAudio playerAudio;
@@ -46,6 +57,9 @@ public class PlayerWeapon : MonoBehaviour
         FindModeButtons();        // ← New
         UpdateModeButtons();      // ← New: Set initial button states
         playerAudio = GetComponent<PlayerAudio>();
+        currentAmmo = fireMode == FireMode.Single ?
+    singleMagazineSize :
+    autoMagazineSize;
     }
 
     private void Update()
@@ -203,10 +217,58 @@ public class PlayerWeapon : MonoBehaviour
     {
         while (isHoldingFire)
         {
+            if (isReloading)
+                yield break;
+
+            if (currentAmmo <= 0)
+            {
+                StartCoroutine(Reload());
+                yield break;
+            }
+
+            currentAmmo--;
+
             Fire(autoDamage);
+
+            if (currentAmmo <= 0)
+            {
+                StartCoroutine(Reload());
+                yield break;
+            }
+
             yield return new WaitForSeconds(autoFireRate);
         }
+
         autoFireRoutine = null;
+    }
+    public void ReloadGun()
+    {
+
+        StartCoroutine(Reload());
+    }
+    IEnumerator Reload()
+    {
+        if (isReloading)
+            yield break;
+
+        isReloading = true;
+
+        StopFire();
+        playerAudio.PlayReloadSound();
+        Debug.Log("Reloading...");
+
+        if (anim != null)
+            anim.SetTrigger("Reload");
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = fireMode == FireMode.Single
+            ? singleMagazineSize
+            : autoMagazineSize;
+
+        isReloading = false;
+
+        Debug.Log("Reload Complete");
     }
 
     //=========================================
@@ -214,10 +276,30 @@ public class PlayerWeapon : MonoBehaviour
     //=========================================
     async void FireSingle()
     {
-        if (!canFire) return;
+        if (!canFire)
+            return;
+
+        if (isReloading)
+            return;
+
+        if (currentAmmo <= 0)
+        {
+            StartCoroutine(Reload());
+            return;
+        }
+
         canFire = false;
+
+        currentAmmo--;
+
         Fire(singleDamage);
-        await System.Threading.Tasks.Task.Delay((int)(singleFireRate * 1000));
+
+        if (currentAmmo <= 0)
+            StartCoroutine(Reload());
+
+        await System.Threading.Tasks.Task.Delay(
+            (int)(singleFireRate * 1000));
+
         canFire = true;
     }
 
@@ -318,8 +400,17 @@ public class PlayerWeapon : MonoBehaviour
     //=========================================
     public void SetFireMode(FireMode mode)
     {
+        if (isReloading)
+            return;
+
         fireMode = mode;
+
+        currentAmmo = fireMode == FireMode.Single ?
+            singleMagazineSize :
+            autoMagazineSize;
+
         Debug.Log("Fire Mode Changed To : " + fireMode);
-        UpdateModeButtons();     // ← Update button visibility
+
+        UpdateModeButtons();
     }
 }

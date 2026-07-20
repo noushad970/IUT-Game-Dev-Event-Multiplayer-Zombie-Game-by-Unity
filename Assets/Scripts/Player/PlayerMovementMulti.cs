@@ -30,11 +30,13 @@ public class PlayerMovementMulti : MonoBehaviourPun
     private bool isGrounded;
     private bool isJumping;
     private PlayerWeaponMulti playerWeapon;
+    private PlayerAudioMulti playerAudio;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         playerWeapon = GetComponent<PlayerWeaponMulti>();
+        playerAudio = GetComponent<PlayerAudioMulti>();
 
         rb.constraints =
             RigidbodyConstraints.FreezeRotationX |
@@ -104,7 +106,7 @@ public class PlayerMovementMulti : MonoBehaviourPun
         jumpButton = jumpRef.GetComponent<Button>();
 
         if (jumpButton != null)
-            jumpButton.onClick.AddListener(Jump);
+            jumpButton.onClick.AddListener(Reload);
     }
 
     //====================================================
@@ -119,7 +121,7 @@ public class PlayerMovementMulti : MonoBehaviourPun
         if (Keyboard.current != null &&
             Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            Jump();
+            Reload();
         }
     }
 
@@ -154,24 +156,9 @@ public class PlayerMovementMulti : MonoBehaviourPun
     // JUMP
     //====================================================
 
-    public void Jump()
+    public void Reload()
     {
-        if (!isGrounded || isJumping)
-            return;
-
-        isJumping = true;
-
-        if (anim != null)
-            anim.SetTrigger("Jump");
-
-        rb.linearVelocity = new Vector3(
-            rb.linearVelocity.x,
-            0,
-            rb.linearVelocity.z);
-
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        Debug.Log("Player Jumped");
+        playerWeapon.ReloadGun();
     }
 
     //====================================================
@@ -204,6 +191,14 @@ public class PlayerMovementMulti : MonoBehaviourPun
                 v--;
 
             keyboardInput = new Vector2(h, v);
+            //if(h> 0|| v> 0)
+            //{
+            //    playerAudio.StartFootsteps();
+            //}
+            //else
+            //{
+            //    playerAudio.StopFootsteps();
+            //}
         }
 
         //-----------------------------------
@@ -226,12 +221,27 @@ public class PlayerMovementMulti : MonoBehaviourPun
 
         if (movement.magnitude > 1f)
             movement.Normalize();
-
+        //if(movement.sqrMagnitude > 0.01f)
+        //{
+        //    playerAudio.StartFootsteps();
+        //}
+        //else
+        //{
+        //    playerAudio.StopFootsteps();
+        //}
         //-----------------------------------
         // Animation
         //-----------------------------------
+        if (anim.GetBool("Running"))
+        {
+            playerAudio.StartFootsteps();
 
-        if (anim != null)
+        }
+        else
+        {
+            playerAudio.StopFootsteps();
+        }
+            if (anim != null)
             anim.SetBool("Running", movement.sqrMagnitude > 0.01f);
 
         //-----------------------------------

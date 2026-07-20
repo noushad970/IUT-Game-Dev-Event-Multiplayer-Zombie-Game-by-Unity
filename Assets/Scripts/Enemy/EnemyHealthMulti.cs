@@ -33,10 +33,11 @@ public class EnemyHealthMulti : MonoBehaviourPun
     private Collider col;
     private EnemyAIMulti enemyAI;
     public bool isBoss = false;
+    EnemyAudioMulti enemyAudio;
     void Awake()
     {
         currentHealth = maxHealth;
-
+        enemyAudio = GetComponent<EnemyAudioMulti>();
         anim = GetComponent<Animator>();
         col = GetComponent<Collider>();
         enemyAI = GetComponent<EnemyAIMulti>();
@@ -70,6 +71,7 @@ public class EnemyHealthMulti : MonoBehaviourPun
         if (currentHealth <= 0)
         {
             Die(attacker);
+            enemyAudio.PlayDeath();
         }
     }
 

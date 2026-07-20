@@ -24,6 +24,7 @@ public class EnemyAIMulti : MonoBehaviourPun
 
     private Transform target;
     private    PlayerHealthMulti  targetHealth;
+    EnemyAudioMulti enemyAudio;
 
     private float attackTimer;
 
@@ -31,7 +32,7 @@ public class EnemyAIMulti : MonoBehaviourPun
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-
+        enemyAudio = GetComponent<EnemyAudioMulti>();
         Debug.Log("Enemy Initialized");
     }
 
@@ -135,6 +136,9 @@ public class EnemyAIMulti : MonoBehaviourPun
 
         if (anim != null)
             anim.SetBool("Walk", true);
+
+        if (enemyAudio != null)
+            enemyAudio.StartWalk();
     }
 
     //==================================================
@@ -148,6 +152,7 @@ public class EnemyAIMulti : MonoBehaviourPun
 
         if (anim != null)
             anim.SetBool("Walk", false);
+        if (enemyAudio != null) enemyAudio.StopWalk();
 
         Vector3 dir =
             target.position - transform.position;
@@ -171,7 +176,11 @@ public class EnemyAIMulti : MonoBehaviourPun
         attackTimer = 0;
 
         if (anim != null)
+        {
+
             anim.SetTrigger("Attack01");
+            enemyAudio.PlayAttack();
+        }
 
         photonView.RPC(
             nameof(RPC_PlayHitEffect),
@@ -224,7 +233,10 @@ public class EnemyAIMulti : MonoBehaviourPun
             agent.isStopped = true;
 
         if (anim != null)
+        {
+            enemyAudio.StopWalk();
             anim.SetBool("Walk", false);
+        }
     }
 
     //==================================================

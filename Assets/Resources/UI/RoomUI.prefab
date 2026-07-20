@@ -544,6 +544,7 @@ GameObject:
   - component: {fileID: 1294251658143013504}
   - component: {fileID: 5583709775750993523}
   - component: {fileID: 3570388369677404901}
+  - component: {fileID: -6576596498323694596}
   m_Layer: 5
   m_Name: RoomUI
   m_TagString: Untagged
@@ -626,3 +627,25 @@ MonoBehaviour:
   roomName: {fileID: 8063059816896136620}
   playerCount: {fileID: 3450776849921950922}
   joinButton: {fileID: 8238437624479255559}
+--- !u!95 &-6576596498323694596
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8462966244662799042}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f43cfc0272a3b41cbab0283f404ae52b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

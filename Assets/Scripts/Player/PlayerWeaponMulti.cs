@@ -42,12 +42,22 @@ public class PlayerWeaponMulti : MonoBehaviourPun
     private Coroutine autoFireRoutine;
 
     public GameObject rifle, pistol;
+    public PlayerAudioMulti playerAudio;
 
+    [Header("Reload")]
+    public int singleMagazineSize = 6;
+    public int autoMagazineSize = 20;
+    public float reloadTime = 2f;
+
+    private int currentAmmo;
+    private bool isReloading;
     private void Start()
     {
         FindFireButton();
         FindModeButtons();
         UpdateModeButtons();
+        playerAudio = GetComponent<PlayerAudioMulti>();
+        currentAmmo = autoMagazineSize;
     }
 
     private void Update()
@@ -175,6 +185,7 @@ public class PlayerWeaponMulti : MonoBehaviourPun
         if (fireMode == FireMode.Single)
         {
             FireSingle();
+            
         }
         else
         {
@@ -201,10 +212,58 @@ public class PlayerWeaponMulti : MonoBehaviourPun
     {
         while (isHoldingFire)
         {
+            if (isReloading)
+                yield break;
+
+            if (currentAmmo <= 0)
+            {
+                StartCoroutine(Reload());
+                yield break;
+            }
+
+            currentAmmo--;
+
             Fire(autoDamage);
+
+            playerAudio.PlayRifleShot();
+
             yield return new WaitForSeconds(autoFireRate);
         }
+
         autoFireRoutine = null;
+    }
+    [PunRPC]
+    void RPC_PlayReloadAnimation()
+    {
+        if (anim != null)
+            anim.SetTrigger("Reload");
+    }
+
+    public void ReloadGun()
+    {
+        if (!photonView.IsMine)
+            return;
+        StartCoroutine(Reload());
+    }
+    IEnumerator Reload()
+    {
+        if (isReloading)
+            yield break;
+
+        isReloading = true;
+
+        StopFire();
+        playerAudio.PlayReload();
+        // Reload animation
+        photonView.RPC(nameof(RPC_PlayReloadAnimation), RpcTarget.All);
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = fireMode == FireMode.Auto
+            ? autoMagazineSize
+            : singleMagazineSize;
+
+        isReloading = false;
     }
 
     //=========================================
@@ -212,10 +271,33 @@ public class PlayerWeaponMulti : MonoBehaviourPun
     //=========================================
     async void FireSingle()
     {
-        if (!canFire) return;
+        if (!canFire)
+            return;
+
+        if (isReloading)
+            return;
+
+        if (currentAmmo <= 0)
+        {
+            StartCoroutine(Reload());
+            return;
+        }
+
         canFire = false;
+
+        currentAmmo--;
+
+        playerAudio.PlayPistolShot();
+
         Fire(singleDamage);
+
+        if (currentAmmo <= 0)
+        {
+            StartCoroutine(Reload());
+        }
+
         await System.Threading.Tasks.Task.Delay((int)(singleFireRate * 1000));
+
         canFire = true;
     }
 

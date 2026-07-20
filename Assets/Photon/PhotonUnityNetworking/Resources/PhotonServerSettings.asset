@@ -53,6 +53,19 @@ MonoBehaviour:
   - RPC_EndGame
   - RPC_StartTimer
   - RPC_RequestDamage
+  - RPC_PlayDeath
+  - RPC_PlayHurt
+  - RPC_PlayJump
+  - RPC_PlayPistolShot
+  - RPC_PlayReload
+  - RPC_PlayRifleShot
+  - RPC_StartFootsteps
+  - RPC_StopFootsteps
+  - RPC_PlayAttack
+  - RPC_PlayGrowl
+  - RPC_StartWalk
+  - RPC_StopWalk
+  - RPC_PlayReloadAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
